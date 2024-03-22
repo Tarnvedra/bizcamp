@@ -18,22 +18,26 @@ class ProjectsController extends Controller
     public function store()
     {
         $attributes = \request()->validate([
-            'user_id' => 'required',
             'title' => 'required',
             'description' => 'required',
 
         ]);
 
-        Project::query()->create($attributes);
+        $attributes['user_id'] = auth()->id();
 
+        $project = Project::query()->create($attributes);
+
+      //  dd($attributes, $project);
         return redirect('/projects');
 
 
     }
 
-    public function show()
+    public function show(ViewFactory $view): View
     {
+       $project = Project::query()->findOrFail(\request('project'));
 
+       return $view->make('show', ['project' => $project]);
     }
 
 }

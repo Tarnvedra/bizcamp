@@ -4,8 +4,10 @@
 
     <h1>BizCamp</h1>
 
-    @foreach($projects as $project)
-        <li>{{ $project->title }}</li>
+    @forelse($projects as $project)
+        <li><a href="{{ $project->path() }}">{{ $project->title }}</a></li>
         <li>{{ $project->description }}</li>
-    @endforeach
+    @empty
+        <li>No Projects Found....</li>
+    @endforelse
 @endsection
