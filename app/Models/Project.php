@@ -10,7 +10,7 @@ class Project extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'user_id'];
+    protected $fillable = ['title', 'description'];
     protected $guarded = [];
 
     public function user(): BelongsTo
