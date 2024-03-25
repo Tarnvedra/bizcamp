@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Routing\ResponseFactory;
 
 class ProjectsController extends Controller
 {
@@ -15,9 +17,9 @@ class ProjectsController extends Controller
         return $view->make('index', ['projects' => $projects]);
     }
 
-    public function store()
+    public function store(Request $request, ResponseFactory $response): RedirectResponse
     {
-        $attributes = \request()->validate([
+        $attributes = $request->validate([
             'title' => 'required',
             'description' => 'required',
 
@@ -26,16 +28,15 @@ class ProjectsController extends Controller
         $attributes['user_id'] = auth()->id();
 
         $project = Project::query()->create($attributes);
-
-      //  dd($attributes, $project);
-        return redirect('/projects');
+        
+        return $response->redirectToRoute(('/projects'));
 
 
     }
 
-    public function show(ViewFactory $view): View
+    public function show(ViewFactory $view, Request $request): View
     {
-       $project = Project::query()->findOrFail(\request('project'));
+       $project = Project::query()->findOrFail($request->get('project'));
 
        return $view->make('show', ['project' => $project]);
     }
